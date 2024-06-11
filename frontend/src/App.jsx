@@ -7,6 +7,7 @@ import NotFound from "./pages/NotFound"
 import CreateSub from "./pages/CreateSub"
 import SubVerbo from "./pages/SubVerbo"
 import ProtectedRoute from "./components/ProtectedRoute"
+import Submit from "./pages/Submit"
 
 function Logout() {
   localStorage.clear()
@@ -31,6 +32,14 @@ function App() {
           element={
             <ProtectedRoute>
               <CreateSub />
+            </ProtectedRoute>
+          }
+        />
+        <Route 
+          path="/submit/" 
+          element={
+            <ProtectedRoute>
+              <Submit />
             </ProtectedRoute>
           }
         />

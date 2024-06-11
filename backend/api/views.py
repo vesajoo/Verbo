@@ -45,6 +45,7 @@ class CreateStoryView(generics.CreateAPIView):
         else:
             print(serializer.errors)
 
+
 class GetStoryView(generics.ListAPIView):
     queryset = Story.objects.all()
     serializer_class = StorySerializer

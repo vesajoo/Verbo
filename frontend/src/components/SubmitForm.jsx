@@ -1,6 +1,6 @@
 import { useState } from "react";
 import api from "../api"
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
 import "../styles/Form.css"
 
@@ -8,6 +8,7 @@ function SubmitForm({route}) {
     const [title, setTitle] = useState("")
     const [text, setText] = useState("")
     const [loading, setLoading] = useState(false)
+    const {sub} = useParams();
     const navigate = useNavigate()
 
     const handleSubmit = async (e) => {
@@ -53,4 +54,4 @@ function SubmitForm({route}) {
     </form>
 }
 
-export default Form
+export default SubmitForm

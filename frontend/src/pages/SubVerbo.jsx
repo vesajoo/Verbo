@@ -30,6 +30,7 @@ function SubVerbo(){
     return <div>
         <div>
             {stories.map((story) => <Story story={story}/>)}
+            <a href={`/submit`}>Luo uusi</a>
         </div>
     </div>
 }

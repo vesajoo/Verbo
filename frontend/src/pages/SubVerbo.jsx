@@ -1,13 +1,16 @@
 import { useState, useEffect } from "react"
 import axios from "axios"
 import Story from "../components/Story"
+import { useParams } from "react-router-dom"
 
 const api_unregister = axios.create({
     baseURL: import.meta.env.VITE_API_URL
 })
 
-function Home(){
+function SubVerbo(){
     const [stories, setStories] = useState([])
+    const {sub} = useParams();
+    console.log(sub)
 
     useEffect(() => {
         getStories();
@@ -15,7 +18,7 @@ function Home(){
 
     const getStories = () => {
         api_unregister
-            .get("/api/subverbos/all/")
+            .get(`/api/subverbos/${sub}/`)
             .then((res) => res.data)
             .then((data) => {
                 setStories(data); 
@@ -31,4 +34,4 @@ function Home(){
     </div>
 }
 
-export default Home
+export default SubVerbo

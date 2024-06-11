@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from .models import Subverbo
+from .models import Subverbo, Story
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -16,5 +16,11 @@ class SubVerboSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subverbo
         fields = ["id", "name", "created_at", "owner"]
+        extra_kwargs = {"owner": {"read_only": True}}
+
+class StorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Story
+        fields = ["id", "subverbo", "created_at", "title", "text", "owner"]
         extra_kwargs = {"owner": {"read_only": True}}
     

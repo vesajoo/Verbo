@@ -7,12 +7,8 @@ function Submit(){
     const [text, setText] = useState("")
     const [loading, setLoading] = useState(false)
     const [subs, setSubs] = useState([])
-    const [sub, setSub] = useState("")
+    const [selectedSub, setSelectedSub] = useState()
     const navigate = useNavigate()
-
-    useEffect(() => {
-        getSubs();
-    }, [])
 
     const getSubs = () => {
         api
@@ -22,19 +18,26 @@ function Submit(){
                 setSubs(data);
             })
             .catch((err) => alert(err));
-    };
+        };
 
-    const handleSubmit = async (e) => {
+    useEffect(() => {
+        getSubs();
+        setSelectedSub(1)
+    }, [])
+    
+
+    const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(title,text,sub)
+        const subverbo = selectedSub
+        console.log(subverbo)
         setLoading(true)
         try {
-            await api
-                .post("/api/subverbos/story/create/", {sub, title, text})
+            api
+                .post("/api/subverbos/story/create/", {subverbo, title, text})
                 .then((res) => {
                     if (res.status === 201) 
-                        alert("Success"),
-                        navigate(`/v/${subverbo}`);
+                        alert("Success");
+                        // navigate(`/v/${subverbo}`);
                     else alert("Failed to submit");
                 })
         }
@@ -71,8 +74,8 @@ function Submit(){
             <br/>
             <label htmlFor="select">Sub: </label>
             <br></br>
-            <select id="sub">
-                {subs.map((sub) => <option value={sub.id} onChange={(value) => setSub(value)}>{sub.name}</option>)}
+            <select id="sub" value={selectedSub} onChange={(e) => setSelectedSub(e.target.value)}>
+                {subs.map((sub, i) => <option value={sub.id} key={sub.id}>{sub.name}</option>)}
             </select>
             <br></br>
             <br></br>

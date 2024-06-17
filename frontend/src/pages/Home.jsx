@@ -25,7 +25,7 @@ function Home(){
     };
 
     return <div>
-        <div>
+        <div className="flex justify-center flex-col items-center m-6">
             {stories.map((story) => <Story story={story}/>)}
         </div>
     </div>

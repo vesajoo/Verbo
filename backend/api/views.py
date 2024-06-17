@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from rest_framework import generics
 from .serializers import UserSerializer, SubVerboSerializer, StorySerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.response import Response
 from .models import Subverbo, Story
 
 # Create your views here.
@@ -32,6 +33,11 @@ class SubverboView(generics.ListAPIView):
         parent = Subverbo.objects.get(name=subverbo)
         queryset = parent.child_story.all()
         return queryset
+    
+class LoggedInUserView(generics.ListAPIView):
+    def get(self, request):
+        serializer = UserSerializer(request.user)
+        return Response(serializer.data)
         
 
 class CreateStoryView(generics.CreateAPIView):
@@ -44,7 +50,6 @@ class CreateStoryView(generics.CreateAPIView):
             serializer.save(owner=self.request.user)
         else:
             print(serializer.errors)
-
 
 class GetStoryView(generics.ListAPIView):
     queryset = Story.objects.all()

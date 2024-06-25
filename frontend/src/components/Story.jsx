@@ -1,12 +1,18 @@
 import React from "react"
+import { useNavigate } from "react-router-dom";
 
 function Story({story}){
 
+    const navigate = useNavigate()
     const subverbo = "/v/" + story.subverbo
 
-    return <div className="w-5/6 border-4 border-gray-400 m-6 p-6 rounded-lg bg-element-color hover:border-gray-300">
+    const handleClick = () => {
+        navigate("/"+story.story_url)
+    }
+
+    return <div className="w-5/6 border-4 border-gray-400 m-3 p-6 rounded-lg bg-gray-700 hover:border-gray-300 hover:bg-gray-600" onClick={handleClick}>
         <h1 className="text-white text-2xl">{story.title}</h1>
-        <p className="text-white">Käyttäjä: {story.owner}</p>
+        <p className="text-white">/u/{story.owner}</p>
         <a href={subverbo} className="text-purple-400 hover:text-blue-400">/v/{story.subverbo}</a>
 
     </div>

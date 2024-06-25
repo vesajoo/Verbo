@@ -1,10 +1,10 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from rest_framework import generics
-from .serializers import UserSerializer, SubVerboSerializer, StorySerializer
+from .serializers import UserSerializer, SubVerboSerializer, StorySerializer, CommentSerializer, StoryAndCommentsSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
-from .models import Subverbo, Story
+from .models import Subverbo, Story, Comment
 
 # Create your views here.
 class CreateSubVerboView(generics.CreateAPIView):
@@ -56,7 +56,23 @@ class GetStoryView(generics.ListAPIView):
     serializer_class = StorySerializer
     permission_classes = [AllowAny]
 
+class GetStoryCommentsView(generics.ListAPIView):
+    serializer_class = StoryAndCommentsSerializer
+    permission_classes = [AllowAny]
+    queryset = Story.objects.all()
+
 class CreateUserView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [AllowAny]
+
+class CreateCommentView(generics.CreateAPIView):
+    serializer_class = CommentSerializer
+    permission_classes = [IsAuthenticated]
+    queryset = Comment.objects.all()
+
+    def perform_create(self, serializer):
+        if serializer.is_valid():
+            serializer.save(owner=self.request.user)
+        else:
+            print(serializer.errors)

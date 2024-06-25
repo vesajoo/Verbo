@@ -10,7 +10,6 @@ const api_unregister = axios.create({
 function SubVerbo(){
     const [stories, setStories] = useState([])
     const {sub} = useParams();
-    console.log(sub)
 
     useEffect(() => {
         getStories();
@@ -22,15 +21,13 @@ function SubVerbo(){
             .then((res) => res.data)
             .then((data) => {
                 setStories(data); 
-                console.log(data)
             })
             .catch((err) => alert(err));
     };
 
     return <div>
         <div className="flex justify-center flex-col items-center m-6">
-            {stories.map((story) => <Story story={story}/>)}
-            <a href={`/submit`}>Luo uusi</a>
+            {stories.map((story) => <Story story={story} key={story.id}/>)}
         </div>
     </div>
 }

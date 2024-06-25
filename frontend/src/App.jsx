@@ -10,6 +10,7 @@ import SubVerbo from "./pages/SubVerbo"
 import ProtectedRoute from "./components/ProtectedRoute"
 import Submit from "./pages/Submit"
 import Layout from "./components/Layout"
+import Comments from "./pages/Comments"
 
 function Logout() {
   localStorage.clear()
@@ -47,6 +48,7 @@ function App() {
             }
           />
           <Route path="/v/:sub" element={<SubVerbo />}/>
+          <Route path="/:story" element={<Comments/>}/>
           <Route path="*" element={<NotFound />}/>
       </Routes>
     </BrowserRouter>

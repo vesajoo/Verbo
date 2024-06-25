@@ -11,7 +11,7 @@ const api_unregister = axios.create({
 function Comments(){
     const [comments, setComments] = useState([])
     const [newComment, setNewComment] = useState("")
-    const [story, setStory] = useState()
+    const [storyFull, setStoryFull] = useState()
     const {selectedStory} = useParams();
 
     useEffect(() => {
@@ -20,13 +20,14 @@ function Comments(){
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(newComment, story)
+        const text = newComment
+        const story = storyFull["id"]
         try {
             api
-                .post("/api/subverbos/story/comment/", {story, newComment})
+                .post("/api/subverbos/story/comment/", {story, text})
                 .then((res) => {
                     if (res.status === 201)
-                        alert("Success");
+                        getComments();
                     else alert("Failed to submit comment")
                 })
 
@@ -41,13 +42,17 @@ function Comments(){
             .get(`/api/subverbos/story/${selectedStory}/`)
             .then((res) => res.data)
             .then((data) => {
-                setComments(data); 
+                setComments(data[0].child_comment);
+                setStoryFull(data[0]) 
                 console.log(data)
             })
             .catch((err) => alert(err));
     };
     
     return <div>
+        <div>
+
+        </div>
         <div>
             <form onSubmit={handleSubmit}>
                 <h1 className="text-white">Uusi kommentti</h1>

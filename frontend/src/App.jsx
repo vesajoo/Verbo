@@ -47,8 +47,8 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route path="/:selectedStory" element={<Comments/>}/>
           <Route path="/v/:sub" element={<SubVerbo />}/>
-          <Route path="/:story" element={<Comments/>}/>
           <Route path="*" element={<NotFound />}/>
       </Routes>
     </BrowserRouter>

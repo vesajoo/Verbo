@@ -19,20 +19,22 @@ class UserSerializer(serializers.ModelSerializer):
     
 class CommentSerializer(serializers.ModelSerializer):
     owner = serializers.CharField(source='owner.username', read_only=True)
-    story = serializers.StringRelatedField()
     class Meta:
         model = Comment
         fields = ["id", "story", "created_at", "text", "owner", "comment_url"]
         extra_kwargs = {"owner": {"read_only": True}}
 
-    def create(self, validated_data):
-        story = Story.objects.get(story_url=validated_data('story'))
-        comment = Comment.objects.create(story=story, **validated_data)
-        return comment
     
 class StorySerializer(serializers.ModelSerializer):
     owner = serializers.CharField(source='owner.username', read_only=True)
-    subverbo = serializers.CharField(source='subverbo.name')
+    class Meta:
+        model = Story
+        fields = ["id", "subverbo", "created_at", "title", "text", "owner", "story_url"]
+        extra_kwargs = {"owner": {"read_only": True}}
+
+class ReadStorySerializer(serializers.ModelSerializer):
+    owner = serializers.CharField(source='owner.username', read_only=True)
+    subverbo = serializers.CharField(source='subverbo.name', read_only=True)
     class Meta:
         model = Story
         fields = ["id", "subverbo", "created_at", "title", "text", "owner", "story_url"]
@@ -49,9 +51,8 @@ class SubVerboSerializer(serializers.ModelSerializer):
 
 class StoryAndCommentsSerializer(serializers.ModelSerializer):
     owner = serializers.CharField(source='owner.username', read_only=True)
-    subverbo = serializers.CharField(source='subverbo.name')
-    child_comments = CommentSerializer(many=True, read_only=True)
+    child_comment = CommentSerializer(many=True, read_only=True)
     class Meta:
         model = Story
-        fields = ["id", "subverbo", "created_at", "title", "text", "owner", "story_url", "child_comments"]
+        fields = ["id", "subverbo", "created_at", "title", "text", "owner", "story_url", "child_comment"]
         extra_kwargs = {"owner": {"read_only": True}}

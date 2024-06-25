@@ -74,7 +74,7 @@ function Submit(){
             <label htmlFor="select">Sub: </label>
             <br></br>
             <select id="sub" value={selectedSub} onChange={(e) => setSelectedSub(e.target.value)}>
-                {subs.map((sub, i) => <option value={sub.name} key={sub.id}>{sub.name}</option>)}
+                {subs.map((sub, i) => <option value={sub.id} key={sub.id}>{sub.name}</option>)}
             </select>
             <br></br>
             <br></br>

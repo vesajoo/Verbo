@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from rest_framework import generics
-from .serializers import UserSerializer, SubVerboSerializer, StorySerializer, CommentSerializer, StoryAndCommentsSerializer
+from .serializers import UserSerializer, SubVerboSerializer, StorySerializer, CommentSerializer, StoryAndCommentsSerializer, ReadStorySerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from .models import Subverbo, Story, Comment
@@ -53,13 +53,18 @@ class CreateStoryView(generics.CreateAPIView):
 
 class GetStoryView(generics.ListAPIView):
     queryset = Story.objects.all()
-    serializer_class = StorySerializer
+    serializer_class = ReadStorySerializer
     permission_classes = [AllowAny]
 
 class GetStoryCommentsView(generics.ListAPIView):
     serializer_class = StoryAndCommentsSerializer
     permission_classes = [AllowAny]
-    queryset = Story.objects.all()
+
+    def get_queryset(self, *args, **kwargs):
+        story = self.kwargs.get('slug')
+        queryset = Story.objects.filter(story_url=story)
+        return queryset
+    
 
 class CreateUserView(generics.CreateAPIView):
     queryset = User.objects.all()

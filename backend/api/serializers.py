@@ -21,9 +21,13 @@ class CommentSerializer(serializers.ModelSerializer):
     owner = serializers.CharField(source='owner.username', read_only=True)
     class Meta:
         model = Comment
-        fields = ["id", "story", "created_at", "text", "owner", "comment_url"]
+        fields = ["id", "story", "created_at", "text", "owner", "comment_url", "parent_comment", "replies"]
         extra_kwargs = {"owner": {"read_only": True}}
 
+    def get_fields(self):
+        fields = super(CommentSerializer, self).get_fields()
+        fields["replies"] = CommentSerializer(many=True, read_only=True)
+        return fields
     
 class StorySerializer(serializers.ModelSerializer):
     owner = serializers.CharField(source='owner.username', read_only=True)

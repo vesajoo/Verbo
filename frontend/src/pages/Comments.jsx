@@ -58,8 +58,8 @@ function Comments(){
             </div>
         </div>
         
-        <div className="flex p-3 justify-around">
-            <form onSubmit={handleSubmit}>
+        <div className="width-5/6 p-3 justify-center flex">
+            <form onSubmit={handleSubmit} className="">
                 <h1 className="text-white">Uusi kommentti</h1>
                 <input
                     className="h-24 w-500 bg-gray-200"
@@ -68,13 +68,18 @@ function Comments(){
                     value={newComment}
                     placeholder="Kommentti"
                 />
-                <button className="text-white border-2" type="Submit">
+                <br></br>
+                <button className="text-white border-2 align-bottom m-2 p-2" type="Submit">
                     Lähetä
                 </button>
             </form>
         </div>
         <div className="flex justify-center flex-col items-center m-4">
-            {comments.map((comment) => <Comment comment={comment} key={comment.id}/>)}
+            {comments.map((comment) => (
+                comment["parent_comment"] == null
+                ? (<Comment comment={comment} key={comment.id}/>)
+                : null
+            ))}
         </div>
     </div>
 }

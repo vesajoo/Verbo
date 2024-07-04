@@ -51,6 +51,7 @@ class SubVerboSerializer(serializers.ModelSerializer):
 
 class StoryAndCommentsSerializer(serializers.ModelSerializer):
     owner = serializers.CharField(source='owner.username', read_only=True)
+    subverbo = serializers.CharField(source='subverbo.name', read_only=True)
     child_comment = CommentSerializer(many=True, read_only=True)
     class Meta:
         model = Story

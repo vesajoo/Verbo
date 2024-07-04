@@ -25,7 +25,7 @@ class GetSubVerbosView(generics.ListAPIView):
 
 
 class SubverboView(generics.ListAPIView):
-    serializer_class = StorySerializer
+    serializer_class = ReadStorySerializer
     permission_classes = [AllowAny]
 
     def get_queryset(self, *args, **kwargs):

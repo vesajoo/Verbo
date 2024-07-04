@@ -19,14 +19,13 @@ function Home(){
             .then((res) => res.data)
             .then((data) => {
                 setStories(data); 
-                console.log(data)
             })
             .catch((err) => alert(err));
     };
 
     return <div>
         <div className="flex justify-center flex-col items-center m-4">
-            {stories.map((story) => <Story story={story}/>)}
+            {stories.map((story) => <Story story={story} key={story.id}/>)}
         </div>
     </div>
 }

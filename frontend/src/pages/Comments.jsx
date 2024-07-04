@@ -11,7 +11,7 @@ const api_unregister = axios.create({
 function Comments(){
     const [comments, setComments] = useState([])
     const [newComment, setNewComment] = useState("")
-    const [storyFull, setStoryFull] = useState()
+    const [storyFull, setStoryFull] = useState([])
     const {selectedStory} = useParams();
 
     useEffect(() => {
@@ -44,20 +44,25 @@ function Comments(){
             .then((data) => {
                 setComments(data[0].child_comment);
                 setStoryFull(data[0]) 
-                console.log(data)
             })
             .catch((err) => alert(err));
     };
     
-    return <div>
-        <div>
-
+    return <div >
+        <div className="flex justify-center flex-col items-center m-4">
+            <h1 className="text-white text-3xl">{storyFull["title"]}</h1>
+            <div className="w-5/6 border-4 border-gray-400 m-1 p-2 rounded-lg bg-gray-700">
+                <h1 className="text-white text-lg">{storyFull["text"]}</h1>
+                <a className="text-white text-xs">/u/{storyFull["owner"]}</a>
+                <p className="text-white">{storyFull["created_at"]}</p>
+            </div>
         </div>
-        <div>
+        
+        <div className="flex p-3 justify-around">
             <form onSubmit={handleSubmit}>
                 <h1 className="text-white">Uusi kommentti</h1>
                 <input
-                    className=""
+                    className="h-24 w-500 bg-gray-200"
                     type="textfield"
                     onChange={(e) => setNewComment(e.target.value)}
                     value={newComment}
@@ -66,10 +71,10 @@ function Comments(){
                 <button className="text-white border-2" type="Submit">
                     Lähetä
                 </button>
-    </form>
+            </form>
         </div>
         <div className="flex justify-center flex-col items-center m-4">
-            {comments.map((comment) => <Comment comment={comment}/>)}
+            {comments.map((comment) => <Comment comment={comment} key={comment.id}/>)}
         </div>
     </div>
 }

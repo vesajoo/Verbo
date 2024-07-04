@@ -28,7 +28,7 @@ function Submit(){
     const handleSubmit = (e) => {
         e.preventDefault();
         const subverbo = selectedSub
-        console.log(subverbo)
+        console.log(subs)
         setLoading(true)
         try {
             api
@@ -48,10 +48,9 @@ function Submit(){
         }
     };
 
-    return <div>
-        <h2>Submit</h2>
+    return <div className="w-5/6 flex justify-center">
         <form onSubmit={handleSubmit}>
-            <label htmlFor="title">Title</label>
+            <label htmlFor="title" className="text-white ">Otsikko</label>
             <br/>
             <input
                 type="text"
@@ -61,24 +60,25 @@ function Submit(){
                 value={title}
             />
             <br/>
-            <label htmlFor="text">Text</label>
+            <label htmlFor="text" className="text-white ">Teksti</label>
             <br/>
             <input
                 type="text"
                 id="text"
+                className="w-full"
                 required
                 onChange={(e) => setText(e.target.value)}
                 value={text}
             />
             <br/>
-            <label htmlFor="select">Sub: </label>
+            <label htmlFor="select" className="text-white ">Yhteisö: </label>
             <br></br>
             <select id="sub" value={selectedSub} onChange={(e) => setSelectedSub(e.target.value)}>
                 {subs.map((sub, i) => <option value={sub.id} key={sub.id}>{sub.name}</option>)}
             </select>
             <br></br>
             <br></br>
-            <input type="submit" value="Submit"></input>
+            <input type="submit" value="Submit" className="text-white border-2 rounded-md p-2 bg-gray-500 cursor-pointer hover:bg-purple-400"></input>
         </form>
     </div>
 }

@@ -9,4 +9,5 @@ urlpatterns = [
     path('subverbos/story/<slug:slug>/', views.GetStoryCommentsView.as_view(), name="comment-list"),
     path('subverbos/all/', views.GetStoryView.as_view(), name="story-all"),
     path('subverbos/<str:name>/', views.SubverboView.as_view(), name="subverbo-view"),
+    path('user/<str:user>/', views.UserView.as_view(), name="user-view"),
 ]

@@ -26,7 +26,7 @@ function SubVerbo(){
     };
 
     return <div>
-        <div className="flex justify-center flex-col items-center m-6">
+        <div className="flex justify-center flex-col items-center m-4">
             {stories.map((story) => <Story story={story} key={story.id}/>)}
         </div>
     </div>

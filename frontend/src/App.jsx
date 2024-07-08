@@ -11,6 +11,7 @@ import ProtectedRoute from "./components/ProtectedRoute"
 import Submit from "./pages/Submit"
 import Layout from "./components/Layout"
 import Comments from "./pages/Comments"
+import Profile from "./pages/Profile"
 
 function Logout() {
   localStorage.clear()
@@ -50,6 +51,7 @@ function App() {
           <Route path="/:selectedStory" element={<Comments/>}/>
           <Route path="/v/:sub" element={<SubVerbo />}/>
           <Route path="*" element={<NotFound />}/>
+          <Route path="/u/:user" element={<Profile />}/>
       </Routes>
     </BrowserRouter>
   )

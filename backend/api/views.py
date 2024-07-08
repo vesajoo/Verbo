@@ -1,10 +1,11 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from rest_framework import generics
-from .serializers import UserSerializer, SubVerboSerializer, StorySerializer, CommentSerializer, StoryAndCommentsSerializer, ReadStorySerializer
+from .serializers import UserSerializer, SubVerboSerializer, StorySerializer, CommentSerializer, StoryAndCommentsSerializer, ReadStorySerializer, ReadUserSerializer, ReadSubVerboSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from .models import Subverbo, Story, Comment
+from itertools import chain
 
 # Create your views here.
 class CreateSubVerboView(generics.CreateAPIView):
@@ -20,7 +21,7 @@ class CreateSubVerboView(generics.CreateAPIView):
 
 class GetSubVerbosView(generics.ListAPIView):
     queryset = Subverbo.objects.all()
-    serializer_class = SubVerboSerializer
+    serializer_class = ReadSubVerboSerializer
     permission_classes = [AllowAny]
 
 
@@ -31,7 +32,7 @@ class SubverboView(generics.ListAPIView):
     def get_queryset(self, *args, **kwargs):
         subverbo = self.kwargs.get('name')
         parent = Subverbo.objects.get(name=subverbo)
-        queryset = parent.child_story.all()
+        queryset = parent.child_story.all().order_by("-created_at")
         return queryset
     
 class LoggedInUserView(generics.ListAPIView):
@@ -52,7 +53,7 @@ class CreateStoryView(generics.CreateAPIView):
             print(serializer.errors)
 
 class GetStoryView(generics.ListAPIView):
-    queryset = Story.objects.all()
+    queryset = Story.objects.all().order_by("-created_at")
     serializer_class = ReadStorySerializer
     permission_classes = [AllowAny]
 
@@ -81,3 +82,12 @@ class CreateCommentView(generics.CreateAPIView):
             serializer.save(owner=self.request.user)
         else:
             print(serializer.errors)
+
+class UserView(generics.ListAPIView):
+    serializer_class = ReadUserSerializer
+    permission_classes = [AllowAny]
+    
+    def get_queryset(self, *args, **kwargs):
+        user = self.kwargs.get('user')
+        queryset = User.objects.filter(username=user)
+        return queryset

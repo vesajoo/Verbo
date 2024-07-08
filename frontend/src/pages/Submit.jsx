@@ -1,14 +1,12 @@
 import { useState, useEffect } from "react"
-import { useNavigate, useParams } from "react-router-dom"
 import api from "../api"
 
 function Submit(){
     const [title, setTitle] = useState("")
     const [text, setText] = useState("")
-    const [loading, setLoading] = useState(false)
     const [subs, setSubs] = useState([])
     const [selectedSub, setSelectedSub] = useState()
-    const navigate = useNavigate()
+
 
     const getSubs = () => {
         api
@@ -28,8 +26,6 @@ function Submit(){
     const handleSubmit = (e) => {
         e.preventDefault();
         const subverbo = selectedSub
-        console.log(subs)
-        setLoading(true)
         try {
             api
                 .post("/api/subverbos/story/create/", {subverbo, title, text})
@@ -43,18 +39,18 @@ function Submit(){
         catch(error) {
             alert(error.message)
         }
-        finally {
-            setLoading(false)
-        }
+        
     };
 
-    return <div className="w-5/6 flex justify-center">
-        <form onSubmit={handleSubmit}>
+    return <div className="w-1/2">
+    <div className="m-5">
+        <form onSubmit={handleSubmit} className="border-2 p-5 flex flex-col">
             <label htmlFor="title" className="text-white ">Otsikko</label>
             <br/>
             <input
                 type="text"
                 id="title"
+                className="w-full"
                 required
                 onChange={(e) => setTitle(e.target.value)}
                 value={title}
@@ -62,7 +58,7 @@ function Submit(){
             <br/>
             <label htmlFor="text" className="text-white ">Teksti</label>
             <br/>
-            <input
+            <textarea
                 type="text"
                 id="text"
                 className="w-full"
@@ -78,8 +74,9 @@ function Submit(){
             </select>
             <br></br>
             <br></br>
-            <input type="submit" value="Submit" className="text-white border-2 rounded-md p-2 bg-gray-500 cursor-pointer hover:bg-purple-400"></input>
+            <input type="submit" value="Lähetä" className="text-white border-2 rounded-md p-2 bg-gray-500 cursor-pointer hover:bg-purple-400"></input>
         </form>
+    </div>
     </div>
 }
 

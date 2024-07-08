@@ -53,6 +53,13 @@ class SubVerboSerializer(serializers.ModelSerializer):
         fields = ["id", "name", "created_at", "owner", "child_story"]
         extra_kwargs = {"owner": {"read_only": True}}
 
+class ReadSubVerboSerializer(serializers.ModelSerializer):
+    owner = serializers.CharField(source='owner.username', read_only=True)
+    class Meta:
+        model = Subverbo
+        fields = ["id", "name", "created_at", "owner"]
+        extra_kwargs = {"owner": {"read_only": True}}
+
 class StoryAndCommentsSerializer(serializers.ModelSerializer):
     owner = serializers.CharField(source='owner.username', read_only=True)
     subverbo = serializers.CharField(source='subverbo.name', read_only=True)
@@ -61,3 +68,23 @@ class StoryAndCommentsSerializer(serializers.ModelSerializer):
         model = Story
         fields = ["id", "subverbo", "created_at", "title", "text", "owner", "story_url", "child_comment"]
         extra_kwargs = {"owner": {"read_only": True}}
+
+class ProfileCommentsSerializer(serializers.ModelSerializer):
+    story__title = serializers.CharField(source='story.title', read_only=True)
+    story__story_url = serializers.CharField(source='story.story_url', read_only=True)
+    story__subverbo = serializers.CharField(source='story.subverbo.name', read_only=True)
+    owner = serializers.CharField(source='owner.username', read_only=True)
+    class Meta:
+        model = Comment
+        fields = ["id", "story", "created_at", "text", "owner", "comment_url", "parent_comment", "story__title", "story__story_url", "story__subverbo"]
+        extra_kwargs = {"owner": {"read_only": True}}
+
+
+class ReadUserSerializer(serializers.ModelSerializer):
+    stories = ReadStorySerializer(many=True, read_only=True)
+    comments = ProfileCommentsSerializer(many=True, read_only=True)
+    class Meta:
+        model = User
+        fields = ["id", "username", "stories", "comments"]
+
+

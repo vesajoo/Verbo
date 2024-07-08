@@ -2,7 +2,8 @@ import { useState, useEffect } from "react"
 import axios from "axios"
 import api from "../api"
 import Comment from "../components/Comment"
-import { useParams, useNavigate } from "react-router-dom"
+import DateParser from "../components/DateParser"
+import { useParams } from "react-router-dom"
 
 const api_unregister = axios.create({
     baseURL: import.meta.env.VITE_API_URL
@@ -13,6 +14,9 @@ function Comments(){
     const [newComment, setNewComment] = useState("")
     const [storyFull, setStoryFull] = useState([])
     const {selectedStory} = useParams();
+
+    const subverbo = "/v/" + storyFull["subverbo"]
+    const user = "/u/" + storyFull["owner"]
 
     useEffect(() => {
         getComments();
@@ -26,8 +30,11 @@ function Comments(){
             api
                 .post("/api/subverbos/story/comment/", {story, text})
                 .then((res) => {
-                    if (res.status === 201)
+                    if (res.status === 201){
                         getComments();
+                        setNewComment("")
+
+                    }
                     else alert("Failed to submit comment")
                 })
 
@@ -48,13 +55,18 @@ function Comments(){
             .catch((err) => alert(err));
     };
     
-    return <div >
+    return <div>
+            <div className="flex justify-center">
+                <div className="w-5/6 flex flex-row justify-between m-5">
+                    <h1 className="text-white text-3xl">{storyFull["title"]}</h1>
+                    <a className="text-white text-xl hover:cursor-pointer hover:text-gray-400" href={subverbo}>/v/{storyFull["subverbo"]}</a>
+                </div>
+            </div>
         <div className="flex justify-center flex-col items-center m-4">
-            <h1 className="text-white text-3xl">{storyFull["title"]}</h1>
             <div className="w-5/6 border-4 border-gray-400 m-1 p-2 rounded-lg bg-gray-700">
                 <h1 className="text-white text-lg">{storyFull["text"]}</h1>
-                <a className="text-white text-xs">/u/{storyFull["owner"]}</a>
-                <p className="text-white">{storyFull["created_at"]}</p>
+                <a className="text-white text-xs hover:text-gray-400 hover:cursor-pointer" href={user}>/u/{storyFull["owner"]}</a>
+                <DateParser d={storyFull.created_at} />
             </div>
         </div>
         
@@ -74,7 +86,7 @@ function Comments(){
                 </button>
             </form>
         </div>
-        <div className="flex justify-center flex-col items-center m-4">
+        <div className="flex justify-center flex-col items-center">
             {comments.map((comment) => (
                 comment["parent_comment"] == null
                 ? (<Comment comment={comment} key={comment.id}/>)

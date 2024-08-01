@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from .models import Subverbo, Story, Comment
+from django.db.models import Count
 
 class LoggedInUserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -39,11 +40,15 @@ class StorySerializer(serializers.ModelSerializer):
 class ReadStorySerializer(serializers.ModelSerializer):
     owner = serializers.CharField(source='owner.username', read_only=True)
     subverbo = serializers.CharField(source='subverbo.name', read_only=True)
+    comments_count = serializers.SerializerMethodField()
     class Meta:
         model = Story
-        fields = ["id", "subverbo", "created_at", "title", "text", "owner", "story_url"]
+        fields = ["id", "subverbo", "created_at", "title", "text", "owner", "story_url", "comments_count"]
         extra_kwargs = {"owner": {"read_only": True}}
 
+    def get_comments_count(self, obj):
+        child_comment = CommentSerializer(many=True, read_only=True)
+        return obj.child_comment.count()
 
 class SubVerboSerializer(serializers.ModelSerializer):
     child_story = StorySerializer(many=True, read_only=True)

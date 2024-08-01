@@ -6,6 +6,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from .models import Subverbo, Story, Comment
 from itertools import chain
+from django.db.models import Count
 
 # Create your views here.
 class CreateSubVerboView(generics.CreateAPIView):
